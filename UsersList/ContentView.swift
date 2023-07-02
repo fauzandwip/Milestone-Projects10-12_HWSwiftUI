@@ -14,15 +14,32 @@ struct ContentView: View {
         NavigationView {
             List {
                 ForEach(users.allUsers, id: \.id) { user in
-                    NavigationLink {
-                        Text("Detail View")
-                    } label: {
-                        VStack(alignment: .leading) {
-                            Text(user.name)
-                            Text(user.email)
-                                .font(.subheadline)
-                                .foregroundColor(.secondary)
+                    ZStack(alignment: .leading) {
+                        HStack {
+                            VStack(alignment: .leading) {
+                                Text(user.name)
+                                Text(user.email)
+                                    .font(.subheadline)
+                                    .foregroundColor(.secondary)
+                            }
+                            
+                            Spacer()
+                            
+                            VStack(spacing: 3) {
+                                Circle()
+                                    .frame(width: 6)
+                                .foregroundColor(user.isActive ? .green : .red)
+                                
+                                Text(user.isActive ? "Active" : "Inactive")
+                                    .font(.system(size:9))
+                                    .foregroundColor(user.isActive ? .black : .secondary)
+                            }
                         }
+                        
+                        NavigationLink(destination: Text("Detail View")) {
+                            EmptyView()
+                        }
+                        .opacity(0)
                     }
                 }
             }
