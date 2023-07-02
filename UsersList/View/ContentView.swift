@@ -36,7 +36,9 @@ struct ContentView: View {
                             }
                         }
                         
-                        NavigationLink(destination: Text("Detail View")) {
+                        NavigationLink {
+                            DetailView(users: users, user: user)
+                        } label: {
                             EmptyView()
                         }
                         .opacity(0)

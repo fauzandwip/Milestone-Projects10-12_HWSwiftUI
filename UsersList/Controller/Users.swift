@@ -18,7 +18,9 @@ class Users: ObservableObject {
 
         do {
             let (data, _) = try await URLSession.shared.data(from: url)
-            let decoded = try JSONDecoder().decode([User].self, from: data)
+            let jsonDecoder = JSONDecoder()
+            
+            let decoded = try jsonDecoder.decode([User].self, from: data)
             
             DispatchQueue.main.async {
                 self.allUsers = decoded
