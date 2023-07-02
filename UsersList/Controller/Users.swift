@@ -30,4 +30,8 @@ class Users: ObservableObject {
             print("Invalid data, \(error.localizedDescription)")
         }
     }
+    
+    func find(userID: String) -> User? {
+        return allUsers.first(where: { $0.id == userID })
+    }
 }

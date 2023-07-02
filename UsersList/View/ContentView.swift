@@ -32,7 +32,7 @@ struct ContentView: View {
                                 
                                 Text(user.isActive ? "Active" : "Inactive")
                                     .font(.system(size:9))
-                                    .foregroundColor(user.isActive ? .black : .secondary)
+                                    .foregroundColor(user.isActive ? .primary : .secondary)
                             }
                         }
                         

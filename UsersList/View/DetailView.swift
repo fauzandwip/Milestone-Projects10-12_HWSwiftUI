@@ -22,11 +22,16 @@ struct RowDetailView: View {
 }
 
 struct FriendView: View {
+    @ObservedObject var users: Users
     var friend: Friend
     
     var body: some View {
         NavigationLink {
-            Text("Detail Friend View")
+            if let foundFriend = self.users.find(userID: friend.id) {
+                DetailView(users: users, user: foundFriend)
+            } else {
+                Text("Friend Not Found")
+            }
         } label: {
             HStack {
                 Text(friend.name)
@@ -60,7 +65,7 @@ struct DetailView: View {
             RowDetailView(header: "Tags", text: getTags())
             Section(header: Text("Friends")) {
                 ForEach(user.friends, id: \.id) { friend in
-                    FriendView(friend: friend)
+                    FriendView(users: users, friend: friend)
                 }
             }
         }
