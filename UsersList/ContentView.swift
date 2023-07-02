@@ -8,14 +8,29 @@
 import SwiftUI
 
 struct ContentView: View {
+    @StateObject private var users = Users()
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+        NavigationView {
+            List {
+                ForEach(users.allUsers, id: \.id) { user in
+                    NavigationLink {
+                        Text("Detail View")
+                    } label: {
+                        VStack(alignment: .leading) {
+                            Text(user.name)
+                            Text(user.email)
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                        }
+                    }
+                }
+            }
+            .task {
+                await users.loadData()
+            }
+            .navigationTitle("Users List")
         }
-        .padding()
     }
 }
 
