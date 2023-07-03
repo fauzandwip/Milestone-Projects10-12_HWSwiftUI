@@ -8,17 +8,22 @@
 import SwiftUI
 
 struct ContentView: View {
+    @Environment(\.managedObjectContext) var moc
+    @FetchRequest(sortDescriptors: [
+        SortDescriptor(\.name)
+    ]) var cachedUsers: FetchedResults<CachedUser>
+    
     @StateObject private var users = Users()
     
     var body: some View {
         NavigationView {
             List {
-                ForEach(users.allUsers, id: \.id) { user in
+                ForEach(cachedUsers, id: \.id) { cachedUser in
                     ZStack(alignment: .leading) {
                         HStack {
                             VStack(alignment: .leading) {
-                                Text(user.name)
-                                Text(user.email)
+                                Text(cachedUser.wrappedName)
+                                Text(cachedUser.wrappedEmail)
                                     .font(.subheadline)
                                     .foregroundColor(.secondary)
                             }
@@ -28,16 +33,16 @@ struct ContentView: View {
                             VStack(spacing: 3) {
                                 Circle()
                                     .frame(width: 6)
-                                .foregroundColor(user.isActive ? .green : .red)
+                                    .foregroundColor(cachedUser.isActive ? .green : .red)
                                 
-                                Text(user.isActive ? "Active" : "Inactive")
+                                Text(cachedUser.isActive ? "Active" : "Inactive")
                                     .font(.system(size:9))
-                                    .foregroundColor(user.isActive ? .primary : .secondary)
+                                    .foregroundColor(cachedUser.isActive ? .primary : .secondary)
                             }
                         }
                         
                         NavigationLink {
-                            DetailView(users: users, user: user)
+                            DetailView(cachedUser: cachedUser)
                         } label: {
                             EmptyView()
                         }
@@ -45,16 +50,18 @@ struct ContentView: View {
                     }
                 }
             }
-            .task {
-                await users.loadData()
+            .onAppear {
+                Task {
+                    await users.loadData(moc: moc)
+                }
+                
+                // delete cachedUsers data
+//                for cachedUser in cachedUsers {
+//                    moc.delete(cachedUser)
+//                    try? moc.save()
+//                }
             }
             .navigationTitle("Users List")
         }
-    }
-}
-
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
     }
 }
