@@ -27,7 +27,6 @@ extension CachedFriend {
     public var wrappedName: String {
         name ?? "Unknwon Name"
     }
-    
 }
 
 // MARK: Generated accessors for user

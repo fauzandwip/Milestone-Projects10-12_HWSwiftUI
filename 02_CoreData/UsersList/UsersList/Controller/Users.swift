@@ -11,8 +11,10 @@ import Foundation
 class Users: ObservableObject {
     var allUsers = [User]()
     
+    let url = "https://www.hackingwithswift.com/samples/friendface.json"
+    
     func loadData(moc: NSManagedObjectContext) async {
-        guard let url = URL(string: "https://www.hackingwithswift.com/samples/friendface.json") else {
+        guard let url = URL(string: self.url) else {
             print("Failed to load url.")
             return
         }
