@@ -46,7 +46,9 @@ struct ContentView: View {
                 }
             }
             .task {
-                await users.loadData()
+                if users.allUsers.isEmpty {
+                    await users.loadData()
+                }
             }
             .navigationTitle("Users List")
         }
